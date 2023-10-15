@@ -95,3 +95,7 @@ bin/kafka-console-produce.sh -- 프로듀서 관련 커멘드 쉘파일
 (데이터를 카프카로 전달한다. 프로듀서의 역할)
 bin/kafka-console-consumer.sh --bootstrap-server my-kafka:9092 --topic
 (카프카의 데이터를 읽는다. 컨슈머 역할)
+이때 필수옵션으로 --bootstrap-server에 카프카 클러스터 정보,
+--topic에 토픽 이름이 필요하다. 추가로 --from-beginning 옵션을 주면
+토픽에 저장된 가장 처음 데이터로부터 출력한다.
+
