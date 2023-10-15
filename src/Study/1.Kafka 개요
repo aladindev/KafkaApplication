@@ -88,3 +88,8 @@ bin/kafka-server-start.sh -daemon ./config/server.properties
 
 실행 순서는
 주키퍼 -> kafka 안그러면 에러 !!
+
+
+bin/kafka-topics.sh -- 토픽 관련 커맨드 쉘 파일
+bin/kafka-console-produce.sh -- 프로듀서 관련 커멘드 쉘파일
+(데이터를 카프카로 전달한다. 프로듀서의 역할)
