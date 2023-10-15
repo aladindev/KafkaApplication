@@ -93,3 +93,5 @@ bin/kafka-server-start.sh -daemon ./config/server.properties
 bin/kafka-topics.sh -- 토픽 관련 커맨드 쉘 파일
 bin/kafka-console-produce.sh -- 프로듀서 관련 커멘드 쉘파일
 (데이터를 카프카로 전달한다. 프로듀서의 역할)
+bin/kafka-console-consumer.sh --bootstrap-server my-kafka:9092 --topic
+(카프카의 데이터를 읽는다. 컨슈머 역할)
