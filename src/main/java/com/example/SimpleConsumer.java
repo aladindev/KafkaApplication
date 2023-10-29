@@ -1,15 +1,15 @@
 package com.example;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class SimpleConsumer {
@@ -27,7 +27,10 @@ public class SimpleConsumer {
         configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 
+        /* 동기 offset commit */
         KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(configs);
+
+        configs.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         consumer.subscribe(Arrays.asList(TOPIC_NAME));
 
         while(true) {
@@ -35,7 +38,26 @@ public class SimpleConsumer {
 
             for(ConsumerRecord<String, String> record : records) {
                 logger.info("{}", record);
+
+                //개별 레코드 단위로 매번 오프셋 커밋
+//                Map<TopicPartition, OffsetAndMetadata> currentOffset = new HashMap<>();
+//                currentOffset.put(new TopicPartition(record.topic(), record.partition())
+//                                , new OffsetAndMetadata(record.offset()+1, null));
+
+                //sync offset commit
+                //consumer.commitSync();
+
+                // 개별 레코드 단위 매번 옵셋 커밋
+                //consumer.commitSync(currentOffset);
+                
+                // Async offset commit : 커밋이 완료될 때까지
+                // 응답을 기다리지 않기 때문에 동기 옵셋 커밋보다 동일 시간당 데이터 처리량이 더 많다.
+                consumer.commitAsync();
+
+
             }
+
+
         }
     }
 }
