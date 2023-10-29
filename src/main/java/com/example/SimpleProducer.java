@@ -16,7 +16,7 @@ public class SimpleProducer {
     private final static String TOPIC_NAME = "test"; // 전송하고자 하는 토픽명
     private final static String BOOTSTRAP_SERVERS = "my-kafka:9092";
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    /*public static void main(String[] args) throws ExecutionException, InterruptedException {
         Properties configs = new Properties();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -30,11 +30,11 @@ public class SimpleProducer {
         String messageValue = "testMessage";
         RecordMetadata metadata = null;
         ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC_NAME, "aladin", "28");
-        metadata = producer.send(record).get();
+        //metadata = producer.send(record).get();
+        producer.send(record, new ProducerCallback());
 
-        logger.info("{}", metadata.toString());
         producer.flush();
         producer.close();
 
-    }
+    }*/
 }
