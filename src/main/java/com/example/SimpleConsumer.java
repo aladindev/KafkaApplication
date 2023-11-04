@@ -49,7 +49,18 @@ public class SimpleConsumer {
 
                 // Async offset commit : 커밋이 완료될 때까지
                 // 응답을 기다리지 않기 때문에 동기 옵셋 커밋보다 동일 시간당 데이터 처리량이 더 많다.
-                consumer.commitAsync();
+                //consumer.commitAsync();
+
+                // callback 함수를 파라미터로 받아서 결과를 얻을 수 있다.
+                consumer.commitAsync(new OffsetCommitCallback() {
+                    @Override
+                    public void onComplete(Map<TopicPartition, OffsetAndMetadata> offsets, Exception exception) {
+                        if(exception != null) System.err.println("Commit Failed");
+                        else System.out.println("Commit Succeeded");
+
+                        if(exception != null) logger.error("Commit failed for offsets {}", offsets, exception);
+                    }
+                });
 
 
             }
@@ -61,11 +72,12 @@ public class SimpleConsumer {
 
         @Override
         public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
-
+            logger.warn("Partitions are revoked");
         }
 
         @Override
         public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
+            logger.warn("Partitions are assigned");
 
         }
 
