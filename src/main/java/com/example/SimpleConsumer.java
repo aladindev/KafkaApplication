@@ -16,6 +16,7 @@ public class SimpleConsumer {
     private final static String GROUP_ID = "test-group";
 
     public static void main(String[] args) {
+
         Properties configs = new Properties();
         configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         configs.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
