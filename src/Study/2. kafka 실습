@@ -189,7 +189,7 @@ Streams DSL - KTable과 KStream Join()
 producer 역할을 수행하는 Source Connector
 consumer 역할을 수행하는 Sing Connector
 
-카프카 미러메이커2
+카프카 미러메이커2(Kafka- MirrorMaker2)
 
 
 
