@@ -21,6 +21,18 @@ public class TestSourceTask extends SourceTask {
     public void start(Map<String, String> props) {
 
     }
+
+    /** Source Application 혹은 Source File로부터
+     * 데이터를 읽어오는 로직을 작성한다.
+     * 데이터를 읽어오면 토픽으로 보낼 데이터를 SourceRecord로 정의한다.
+     * SourceRecord 클래스는 토픽으로 데이터를 정의하기 위해 사용한다.
+     * List<SourceRecord> 인스턴스에 데이터를 담아 리턴하면
+     * 데이터가 토픽으로 전송된다.*/
+    @Override
+    public List<SourceRecord> poll() throws InterruptedException {
+        return null;
+    }
+
     @Override
     public void initialize(SourceTaskContext context) {
         super.initialize(context);
@@ -39,11 +51,6 @@ public class TestSourceTask extends SourceTask {
     @Override
     public void commitRecord(SourceRecord record, RecordMetadata metadata) throws InterruptedException {
         super.commitRecord(record, metadata);
-    }
-
-    @Override
-    public List<SourceRecord> poll() throws InterruptedException {
-        return null;
     }
 
     @Override
