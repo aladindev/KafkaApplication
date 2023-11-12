@@ -190,6 +190,8 @@ producer 역할을 수행하는 Source Connector
 consumer 역할을 수행하는 Sing Connector
 
 카프카 미러메이커2(Kafka- MirrorMaker2)
+서로 다른 두 개의 카프카 클러스터 간에 토픽을 복제하는 애플리케이션
+
 
 
 
