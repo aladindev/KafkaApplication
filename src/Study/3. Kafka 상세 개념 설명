@@ -57,3 +57,8 @@ Kafka Consumer Multi-Worker Thread
           어플리케이션을 배포하는 방식.
 
 무중단 배포 : 컨슈머의 중단이 불가능한 어플리케이션에서 주로 사용
+
+application.yml(yaml)
+YML 또는 YAML(YAML Ain't Markup Language)
+사람이 쉽게 읽을 수 있는 데이터 직렬화 방식으로서 스프링부트의 설정을 주입하는 데에
+사용할 수 있다.
