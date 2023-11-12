@@ -200,6 +200,9 @@ Active-standby Cluster 운영
 이때 서비스 어플리케이션들이 직접 통신하는 카프카 클러스터를 '액티브 클러스터'라 하고
 나머지 1개 카프카 클러스터를 '스탠바이 클러스터라고 부른다.'
 
+Active-active Cluster 운영
+
+Hub and spoke Cluster 운영
 
 
 
