@@ -1,16 +1,23 @@
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.PartitionOffset;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.core.KafkaProducerException;
 import org.springframework.kafka.core.KafkaSendCallback;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-public class SpringProducerApplication implements CommandLineRunner {
+public class SpringKafkaApplication implements CommandLineRunner {
 
+    public static Logger logger = LoggerFactory.getLogger(SpringKafkaApplication.class);
     private static String TOPIC_NAME = "test";
 
     /** KafkaTemplate을 @Autowired 어노테이션으로 주입받아 사용
@@ -21,9 +28,27 @@ public class SpringProducerApplication implements CommandLineRunner {
     private KafkaTemplate<String, String> customKafkaTemplate;
 
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(SpringProducerApplication.class);
+        SpringApplication application = new SpringApplication(SpringKafkaApplication.class);
         application.run(args);
     }
+
+    /** Kafka Listener */
+    @KafkaListener(topics = "test", groupId = "test-group-00")
+    public void recordListener(ConsumerRecord<String, String> record) {
+        logger.info(record.toString());
+    }
+    @KafkaListener(topics = "test", groupId = "test-group-01")
+    public void singleTopicListener(String messageValue) {
+        logger.info(messageValue);
+    }
+    @KafkaListener(topics = "test", groupId = "test-group-02", properties = {"max.poll.interval.ms:60000", "auto.offset.reset:earliest"})
+    public void singleTopicWithPropertiesListener(String messageValue) {
+        logger.info(messageValue);
+    }
+    @KafkaListener(topicPartitions = {
+             @TopicPartition(topic = "test01", partitions = {"0", "1"})
+            ,@TopicPartition(topic = "test02", partitionOffsets = @PartitionOffset(partition = "0", initialOffset = "3"))
+    })
 
     @Override
     public void run(String... args) throws Exception {
