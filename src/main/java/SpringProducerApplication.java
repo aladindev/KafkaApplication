@@ -2,7 +2,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.kafka.core.KafkaProducerException;
+import org.springframework.kafka.core.KafkaSendCallback;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.util.concurrent.ListenableFuture;
 
 @SpringBootApplication
 public class SpringProducerApplication implements CommandLineRunner {
@@ -14,7 +18,7 @@ public class SpringProducerApplication implements CommandLineRunner {
      * 스프링 카프카에서 제공하는 객체로 주입된다.
      * application.yaml에 선언한 옵션값은 자동으로 주입된다.*/
     @Autowired
-    private KafkaTemplate<Integer, String> template;
+    private KafkaTemplate<String, String> customKafkaTemplate;
 
     public static void main(String[] args) {
         SpringApplication application = new SpringApplication(SpringProducerApplication.class);
@@ -23,9 +27,21 @@ public class SpringProducerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        for(int i = 0 ; i < 10 ; i++) {
-            template.send(TOPIC_NAME, "test" + i);
-        }
+        ListenableFuture<SendResult<String, String>> future = customKafkaTemplate.send(TOPIC_NAME, "test");
+        future.addCallback(new KafkaSendCallback<String, String>() {
+            @Override
+            public void onSuccess(SendResult<String, String> result) {
+
+            }
+            @Override
+            public void onFailure(Throwable ex) {
+                KafkaSendCallback.super.onFailure(ex);
+            }
+            @Override
+            public void onFailure(KafkaProducerException ex) {
+
+            }
+        });
         System.exit(0); // 작업 완료 후 종료
     }
 }
