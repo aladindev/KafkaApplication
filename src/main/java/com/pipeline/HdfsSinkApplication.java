@@ -27,7 +27,7 @@ public class HdfsSinkApplication {
     public static void main(String[] args) {
         /** 컨슈머 스레드들을 실행하는 자바 main thread
          * 컨슈머에 필요한 설정을 미리 정의해서 각 컨슈머 스레드에 Properties 인스턴스를 넘긴다.*/
-        Runtime.getRuntime().addShutdownHook(new ShutdownThread);
+        Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         Properties configs = new Properties();
         configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);

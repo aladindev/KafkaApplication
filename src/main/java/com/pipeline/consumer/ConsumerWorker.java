@@ -1,14 +1,17 @@
 package com.pipeline.consumer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.kafka.annotation.TopicPartition;
 
 import java.time.Duration;
 import java.util.*;
@@ -41,10 +44,10 @@ public class ConsumerWorker implements Runnable{
             while(true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
 
-                for(ConsumerRecord<String, String> record = records) {
+                for(ConsumerRecord<String, String> record : records) {
                     addHdfsFileBuffer(record);
                 }
-                saveBufferToHdfsFile(Consumer.assignment());
+                saveBufferToHdfsFile(consumer.assignment());
             }
         } catch(WakeupException e) {
             logger.warn("Wakeup consumer");
@@ -66,7 +69,7 @@ public class ConsumerWorker implements Runnable{
     }
 
     private void saveBufferToHdfsFile(Set<TopicPartition> partitions) {
-        partitions.forEach(p -> checkFlushCount(p.partition));
+        partitions.forEach(p -> checkFlushCount(p.partition()));
     }
 
     private void checkFlushCount(int partitionNo) {
@@ -83,7 +86,24 @@ public class ConsumerWorker implements Runnable{
                 String fileName = "/data/color-" + partitionNo + "-"
                         + currentFileOffset.get(partitionNo) + ".log";
                 Configuration configuration = new Configuration();
+                configuration.set("fs.defaultFS", "hdfs://localhost:9000");
+                FileSystem hdfsFileSystem = FileSystem.get(configuration);
+                FSDataOutputStream fileOutputStream = hdfsFileSystem.create(new Path(fileName));
+                fileOutputStream.writeBytes(StringUtils.join(bufferString.get(partitionNo), "\n"));
+                fileOutputStream.close();
+
+                bufferString.put(partitionNo, new ArrayList<>());
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
             }
         }
+    }
+    private void saveRemainBufferToHdfsFile() {
+        bufferString.forEach((partitionNo, v) -> this.save(partitionNo));
+    }
+    public void stopAndWakeup() {
+        logger.info("stopAndWakeup");
+        consumer.wakeup();
+        saveRemainBufferToHdfsFile();
     }
 }
