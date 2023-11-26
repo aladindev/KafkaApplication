@@ -28,6 +28,9 @@ public class ProduceController {
     public void selectColor(@RequestHeader("user-agent") String userAgentName
                             , @RequestParam(value = "color") String colorName
                             , @RequestParam(value = "user") String userName) {
+
+        logger.info("selectColor Api");
+
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
         Date now = new Date();
         Gson gson = new Gson();

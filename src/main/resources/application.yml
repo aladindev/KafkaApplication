@@ -1,8 +1,12 @@
 # Producer의 acks, 메세지 키 직렬화, 메세지 값 직렬화 선언
 spring:
+#  mvc:
+#    view:
+#      suffix: .html
   kafka:
     bootstrap-servers:my-kafka:9092
-    producer:
-      acks:1
-      key-serializer:org.apache.kafka.common.serialization.StringSerializer
-      value-serializer:org.apache.kafka.common.serialization.StringSerializer
+#    producer:
+#      acks:1
+#      key-serializer:org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer:org.apache.kafka.common.serialization.StringSerializer
+
