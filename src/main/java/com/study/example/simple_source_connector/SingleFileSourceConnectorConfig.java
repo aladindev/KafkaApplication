@@ -1,4 +1,4 @@
-package com.example.simple_source_connector;
+package com.study.example.simple_source_connector;
 
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;

@@ -1,6 +1,5 @@
-package com.example.kafka_consumer_with_multi_worker_thread;
+package com.study.example.kafka_consumer_with_multi_worker_thread;
 
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

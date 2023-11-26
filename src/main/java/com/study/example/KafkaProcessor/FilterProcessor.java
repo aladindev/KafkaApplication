@@ -1,4 +1,4 @@
-package com.example.KafkaProcessor;
+package com.study.example.KafkaProcessor;
 
 import org.apache.kafka.streams.processor.api.Processor;
 import org.apache.kafka.streams.processor.api.ProcessorContext;

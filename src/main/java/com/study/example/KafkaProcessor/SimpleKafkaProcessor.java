@@ -1,4 +1,4 @@
-package com.example.KafkaProcessor;
+package com.study.example.KafkaProcessor;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;

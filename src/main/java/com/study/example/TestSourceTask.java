@@ -1,4 +1,4 @@
-package com.example;
+package com.study.example;
 
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.connect.source.SourceRecord;

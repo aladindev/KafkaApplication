@@ -1,6 +1,6 @@
-package com.example.KafkaConsumer;
+package com.study.example.KafkaConsumer;
 
-import com.example.KafkaProducer.SimpleProducer;
+import com.study.example.KafkaProducer.SimpleProducer;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
