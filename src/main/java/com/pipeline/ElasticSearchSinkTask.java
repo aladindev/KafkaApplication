@@ -48,6 +48,10 @@ public class ElasticSearchSinkTask extends SinkTask {
         esClient = new RestHighLevelClient(RestClient.builder(new HttpHost(config.getString(config.ES_CLUSTER_HOST),config.getInt(config.ES_CLUSTER_PORT))));
     }
 
+    /** 레코드가 1개 이상, 0개 초과로 들어올 경우 ElasticSearch로 전송하기 위한 BulkRequest 인스턴스
+     * BulkRequest는 1개 이상의 데이터들을 묶음으로 엘라스틱서치로 전송할 때 사용된다.
+     * BulkRequest에 데이터를 추가할 때는 Map 타입의 데이터와 인덱스 이름이 필요하다.
+     * 토픽의 메세지 값은 JSON 형태의 String 타입이므로 */
     @Override
     public void put(Collection<SinkRecord> records) {
         if(records.size() > 0) {
