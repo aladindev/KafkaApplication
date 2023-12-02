@@ -19,7 +19,10 @@ public class ElasticSearchSinkConnectorConfig extends AbstractConfig {
     private static final String ES_INDEX_DEFAULT_VALUE = "kafka-connector-index";
     private static final String ES_INDEX_DOC = "엘라스틱서치 인덱스를 입력";
 
-    
+    public static ConfigDef CONFIG = new ConfigDef()
+            .define(ES_CLUSTER_HOST, ConfigDef.Type.STRING, ES_CLUSTER_HOST_DEFAULT_VALUE, ConfigDef.Importance.HIGH, ES_CLUSTER_HOST_DOC)
+            .define(ES_CLUSTER_PORT, ConfigDef.Type.INT, ES_CLUSTER_PORT_DEFAULT_VALUE, ConfigDef.Importance.HIGH, ES_CLUSTER_HOST_DOC)
+            .define(ES_INDEX, ConfigDef.Type.STRING, ES_INDEX_DEFAULT_VALUE, ConfigDef.Importance.HIGH, ES_INDEX_DOC);
 
     public ElasticSearchSinkConnectorConfig(ConfigDef definition, Map<?, ?> originals) {
         super(definition, originals);
