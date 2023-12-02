@@ -24,7 +24,7 @@ public class ElasticSearchSinkConnectorConfig extends AbstractConfig {
             .define(ES_CLUSTER_PORT, ConfigDef.Type.INT, ES_CLUSTER_PORT_DEFAULT_VALUE, ConfigDef.Importance.HIGH, ES_CLUSTER_HOST_DOC)
             .define(ES_INDEX, ConfigDef.Type.STRING, ES_INDEX_DEFAULT_VALUE, ConfigDef.Importance.HIGH, ES_INDEX_DOC);
 
-    public ElasticSearchSinkConnectorConfig(ConfigDef definition, Map<?, ?> originals) {
-        super(definition, originals);
+    public ElasticSearchSinkConnectorConfig(Map<String, String> props) {
+        super(CONFIG, props);
     }
 }
