@@ -1,6 +1,5 @@
-package com.application;
+package com.pipeline;
 
-import com.pipeline.ProduceController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

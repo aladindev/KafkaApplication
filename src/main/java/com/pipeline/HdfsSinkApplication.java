@@ -1,11 +1,8 @@
 package com.pipeline;
 
-import com.application.IndexController;
 import com.pipeline.consumer.ConsumerWorker;
-import org.apache.hadoop.util.ShutdownThreadsHelper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.eclipse.jetty.util.thread.ShutdownThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

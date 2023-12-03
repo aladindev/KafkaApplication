@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.vo.UserEventVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFutureCallback;
@@ -18,11 +19,13 @@ public class ProduceController {
 
     private final Logger logger = LoggerFactory.getLogger(ProduceController.class);
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-
-    public ProduceController(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
+//    private final KafkaTemplate<String, String> kafkaTemplate;
+//
+//    public ProduceController(KafkaTemplate<String, String> kafkaTemplate) {
+//        this.kafkaTemplate = kafkaTemplate;
+//    }
+    @Autowired
+    private KafkaTemplate<String, String> customKafkaTemplate;
 
     @GetMapping("/api/select")
     public void selectColor(@RequestHeader("user-agent") String userAgentName
@@ -38,7 +41,7 @@ public class ProduceController {
         UserEventVO userEventVO = new UserEventVO(sdfDate.format(now), userAgentName, colorName, userName );
         String jsonColorLog = gson.toJson(userEventVO);
 
-        kafkaTemplate.send("select-color", jsonColorLog).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+        customKafkaTemplate.send("select-color", jsonColorLog).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
             @Override
             public void onFailure(Throwable ex) {
                 logger.error(ex.getMessage(), ex);
