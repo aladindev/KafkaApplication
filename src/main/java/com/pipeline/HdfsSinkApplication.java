@@ -12,7 +12,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class HdfsSinkApplication { 
+public class HdfsSinkApplication {
     private static final Logger logger = LoggerFactory.getLogger(HdfsSinkApplication.class);
 
     private final static String BOOTSTRAP_SERVERS = "my-kafka:9092";
