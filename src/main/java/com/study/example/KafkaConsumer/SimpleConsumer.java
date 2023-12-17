@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.util.*;
 
-public class SimpleConsumer {
+public class SimpleConsumer {    // new branch
     private final static Logger logger = LoggerFactory.getLogger(SimpleProducer.class);
     private final static String TOPIC_NAME = "test"; // 전송하고자 하는 토픽명
     private final static String BOOTSTRAP_SERVERS = "my-kafka:9092";
