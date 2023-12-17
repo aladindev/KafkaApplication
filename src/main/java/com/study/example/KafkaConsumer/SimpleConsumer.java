@@ -18,7 +18,7 @@ public class SimpleConsumer {
 
     public static void main(String[] args) {
 
-        Properties configs = new Properties();
+        Properties configs = new Properties();  
         configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         configs.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
 
