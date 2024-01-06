@@ -37,7 +37,7 @@ public class ProduceController {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
         Date now = new Date();
         Gson gson = new Gson();
-
+ 
         UserEventVO userEventVO = new UserEventVO(sdfDate.format(now), userAgentName, colorName, userName );
         String jsonColorLog = gson.toJson(userEventVO);
 
