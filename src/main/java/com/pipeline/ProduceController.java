@@ -37,8 +37,8 @@ public class ProduceController {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
         Date now = new Date();
         Gson gson = new Gson();
- 
-        UserEventVO userEventVO = new UserEventVO(sdfDate.format(now), userAgentName, colorName, userName );
+
+        UserEventVO userEventVO = new UserEventVO(sdfDate.format(now), userAgentName, colorName, userName);
         String jsonColorLog = gson.toJson(userEventVO);
 
         customKafkaTemplate.send("select-color", jsonColorLog).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
@@ -52,6 +52,5 @@ public class ProduceController {
                 logger.info(result.toString());
             }
         });
-
     }
 }
