@@ -1,6 +1,8 @@
 package com.pipeline;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.Gson;
 import com.vo.UpbitCoinInfoDto;
 import com.vo.UserEventVO;
@@ -22,12 +24,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*") /* 다른 도메인 호출 허용 */
 public class ProduceController {
 
     private final Logger logger = LoggerFactory.getLogger(ProduceController.class);
+
+    private static String APPLICATION_NAME = "processor-application";
+    private static String TOPIC_NAME = "upbit-coin-info";
+    private static String BOOTSTRAP_SERVERS = "my-kafka:9092";
 
     //    private final KafkaTemplate<String, String> kafkaTemplate;
 //
@@ -76,28 +83,28 @@ public class ProduceController {
             HttpEntity entity = response.getEntity();
 
             String responseInfo = EntityUtils.toString(entity, "UTF-8");
-            logger.info(EntityUtils.toString(entity, "UTF-8"));
+            logger.info(responseInfo);
 
-            UpbitCoinInfoDto upbitCoinInfoDto
-                    = mapper.readValue(responseInfo, UpbitCoinInfoDto.class);
+            try {
+                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false); //파라미터Map에서 DTO에 들어있지 않는변수가있어도무시함.
+                List<UpbitCoinInfoDto> list = mapper.convertValue(responseInfo, TypeFactory.defaultInstance().constructCollectionType(List.class, UpbitCoinInfoDto.class));
+            } catch (Exception e) {};
 
-            Long topicKey = upbitCoinInfoDto.getTimestamp();
 
-            System.out.println(upbitCoinInfoDto.toString());
-
-            customKafkaTemplate.send("select-color", responseInfo).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-            @Override
-            public void onFailure(Throwable ex) {
-                logger.error(ex.getMessage(), ex);
-            }
-
-            @Override
-            public void onSuccess(SendResult<String, String> result) {
-                logger.info(result.toString());
-            }
-        });
+//            customKafkaTemplate.send("upbit-coin-info", topicKey.toString(), responseInfo).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+//                @Override
+//                public void onFailure(Throwable ex) {
+//                    logger.error(ex.getMessage(), ex);
+//                }
+//
+//                @Override
+//                public void onSuccess(SendResult<String, String> result) {
+//                    logger.info(result.toString());
+//                }
+//            });
         } catch(Exception e) {
-
+            logger.error(e.getMessage());
+            return;
         }
     }
 }
