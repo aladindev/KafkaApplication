@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.Gson;
 import com.vo.UpbitCoinInfoDto;
 import com.vo.UserEventVO;
+import org.apache.commons.net.ntp.TimeStamp;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -90,18 +91,19 @@ public class ProduceController {
                 List<UpbitCoinInfoDto> list = mapper.convertValue(responseInfo, TypeFactory.defaultInstance().constructCollectionType(List.class, UpbitCoinInfoDto.class));
             } catch (Exception e) {};
 
+            TimeStamp timeStamp = new TimeStamp(System.currentTimeMillis());
+            String key = timeStamp.toString();
+            customKafkaTemplate.send("upbit-coin-info", key, responseInfo).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+                @Override
+                public void onFailure(Throwable ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
 
-//            customKafkaTemplate.send("upbit-coin-info", topicKey.toString(), responseInfo).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-//                @Override
-//                public void onFailure(Throwable ex) {
-//                    logger.error(ex.getMessage(), ex);
-//                }
-//
-//                @Override
-//                public void onSuccess(SendResult<String, String> result) {
-//                    logger.info(result.toString());
-//                }
-//            });
+                @Override
+                public void onSuccess(SendResult<String, String> result) {
+                    logger.info(result.toString());
+                }
+            });
         } catch(Exception e) {
             logger.error(e.getMessage());
             return;
