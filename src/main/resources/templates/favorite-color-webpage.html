@@ -10,7 +10,7 @@
         if($("#user_name").val().length == 0) {
             alert("이름을 입력하세요");
         } else {
-            var url = 'https://api.upbit.com/v1/ticker?markets=KRW-BTC';
+            var url = 'http://localhost:8080/api/select?';
             $.get(url);
         }
     }
