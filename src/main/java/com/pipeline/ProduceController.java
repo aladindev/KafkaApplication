@@ -1,6 +1,8 @@
 package com.pipeline;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.vo.UpbitCoinInfoDto;
 import com.vo.UserEventVO;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -61,29 +63,11 @@ public class ProduceController {
 //            }
 //        });
 //    }
-    @GetMapping("/api/select")
-    public void selectColor(
-//              @RequestHeader("user-agent") String userAgentName
-//            , @RequestParam(value = "color") String colorName
-//            , @RequestParam(value = "user") String userName
-            ) throws IOException {
-
-        try {
-            HttpClient client = HttpClientBuilder.create().build();
-            HttpGet request = new HttpGet("https://api.upbit.com/v1/ticker?markets=KRW-BTC");
-
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-
-            logger.info(EntityUtils.toString(entity, "UTF-8"));
-        } catch(Exception e) {
-
-        }
-    }
 
     @GetMapping("/api/list")
     public void coinList() throws IOException {
 
+        ObjectMapper mapper = new ObjectMapper();
         try {
             HttpClient client = HttpClientBuilder.create().build();
             HttpGet request = new HttpGet("https://api.upbit.com/v1/ticker?markets=KRW-BTC");
@@ -93,6 +77,13 @@ public class ProduceController {
 
             String responseInfo = EntityUtils.toString(entity, "UTF-8");
             logger.info(EntityUtils.toString(entity, "UTF-8"));
+
+            UpbitCoinInfoDto upbitCoinInfoDto
+                    = mapper.readValue(responseInfo, UpbitCoinInfoDto.class);
+
+            Long topicKey = upbitCoinInfoDto.getTimestamp();
+
+            System.out.println(upbitCoinInfoDto.toString());
 
             customKafkaTemplate.send("select-color", responseInfo).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
             @Override
