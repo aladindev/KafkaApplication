@@ -91,7 +91,20 @@ public class ProduceController {
             HttpResponse response = client.execute(request);
             HttpEntity entity = response.getEntity();
 
+            String responseInfo = EntityUtils.toString(entity, "UTF-8");
             logger.info(EntityUtils.toString(entity, "UTF-8"));
+
+            customKafkaTemplate.send("select-color", responseInfo).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+            @Override
+            public void onFailure(Throwable ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+
+            @Override
+            public void onSuccess(SendResult<String, String> result) {
+                logger.info(result.toString());
+            }
+        });
         } catch(Exception e) {
 
         }
