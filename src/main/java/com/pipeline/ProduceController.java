@@ -90,7 +90,7 @@ public class ProduceController {
                 mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false); //파라미터Map에서 DTO에 들어있지 않는변수가있어도무시함.
                 List<UpbitCoinInfoDto> list = mapper.convertValue(responseInfo, TypeFactory.defaultInstance().constructCollectionType(List.class, UpbitCoinInfoDto.class));
             } catch (Exception e) {};
-
+   
             TimeStamp timeStamp = new TimeStamp(System.currentTimeMillis());
             String key = timeStamp.toString();
             customKafkaTemplate.send("upbit-coin-info", key, responseInfo).addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
